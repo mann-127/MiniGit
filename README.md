@@ -21,7 +21,7 @@ All objects are stored in Git’s native format: `zlib`‑compressed, SHA‑1 ad
 
 ## Installation
 
-MiniGit requires **Python ≥ 3.8** and a working **Git** executable in your `PATH` (only the `clone` command relies on Git).
+MiniGit requires **Python ≥ 3.12** and a working **Git** executable in your `PATH` (only the `clone` command relies on Git).
 
 ```
 MiniGit/
