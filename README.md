@@ -27,10 +27,10 @@ MiniGit requires **Python ≥ 3.8** and a working **Git** executable in your `
 MiniGit/
 ├── minigit/
 │   ├── __init__.py
-│   └── cli.py        ← command‑line interface
+│   └── cli.py        
 ├── pyproject.toml
 ├── README.md
-├── LICENSE           ← MIT by default
+├── LICENSE           
 └── .gitignore
 ```
 
