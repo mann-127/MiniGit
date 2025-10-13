@@ -1,8 +1,28 @@
 # MiniGit
 
+![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Code Size](https://img.shields.io/github/languages/code-size/mann-127/MiniGit)
+[![GitHub Stars](https://img.shields.io/github/stars/mann-127/MiniGit?style=social)](https://github.com/mann-127/MiniGit)
+
 **A minimal Git implementation in pure Python that speaks Git's native object format.**
 
 MiniGit is an educational project that reimplements Git's core plumbing commands from scratch. It demonstrates how Git's content-addressable storage works under the hood—turning files into blobs, directories into trees, and snapshots into commits. Every object MiniGit creates is 100% compatible with Git's storage format, which you can verify by cloning a real repository and inspecting its objects.
+
+---
+
+## Quick Start
+
+```bash
+# Clone and try it in 3 commands
+git clone https://github.com/mann-127/MiniGit.git && cd MiniGit
+python -m minigit.cli init
+echo "Hello Git!" > test.txt && python -m minigit.cli hash-object -w test.txt
+```
+
+**Output**: `557db03de997c86a4a028e1ebd3a1ceb225be238` (SHA-1 hash of your file)
+
+---
 
 ## Features
 
@@ -16,12 +36,41 @@ MiniGit is an educational project that reimplements Git's core plumbing commands
 | `commit-tree <tree_sha> [-p <parent_sha>] -m "message"` | Create a **commit** object that points to a tree and an optional parent.                 |
 | `clone <url> <dir>`                                     | Clone a public repository into `<dir>` (internally calls `git clone`).                   |
 
+---
+
 ## Why MiniGit?
 
 - **Learn by doing**: See exactly how Git stores objects, computes SHA-1 hashes, and builds the commit graph
 - **Zero dependencies**: Built entirely with Python's standard library (`hashlib`, `zlib`, `pathlib`, `time`)
 - **Git-compatible**: Objects created by MiniGit can be read by Git, and vice versa
-- **Clean codebase**: ~280 lines of readable Python that implement the core Git data model
+- **Clean codebase**: **~280 lines** of readable Python vs. Git's **~300,000 lines of C**
+- **Educational focus**: Perfect for understanding Git internals without the complexity
+
+---
+
+## Architecture Overview
+
+```
+Working Directory
+    ├─ file.txt ──────────────► Blob (content-addressed by SHA-1)
+    ├─ src/
+    │   └─ main.py ───────────► Blob
+    └─ docs/
+        └─ README.md ─────────► Blob
+                ↓
+            Tree Object (snapshot of directory structure)
+                ↓
+            Commit Object (points to tree + metadata)
+                ↓
+            Parent Commit(s) (history chain)
+```
+
+**Git's Object Model:**
+- **Blobs**: Store file contents
+- **Trees**: Store directory listings (like a filesystem snapshot)
+- **Commits**: Store trees + metadata (author, message, timestamp, parents)
+
+---
 
 ## What It Does
 
@@ -68,6 +117,8 @@ python -m minigit.cli clone https://github.com/user/repo target-dir
 ```
 *Note: This command delegates to your system's Git binary—MiniGit doesn't yet implement the Smart HTTP protocol.*
 
+---
+
 ## How It Works
 
 ### Content-Addressable Storage
@@ -96,20 +147,30 @@ Commits are text objects that contain:
 - Author and committer metadata (name, email, timestamp, timezone)
 - A commit message
 
+---
+
 ## Requirements
 
 - **Python 3.12+** (uses modern type hints like `Path | None`)
 - **Git** (only required for the `clone` command)
 
+---
+
 ## Installation
 
-Clone this repository and run commands directly:
-
+### From Source
 ```bash
 git clone https://github.com/mann-127/MiniGit.git
 cd MiniGit
 python -m minigit.cli init
 ```
+
+### Optional: Install in Editable Mode
+```bash
+pip install -e .
+```
+
+---
 
 ## Project Structure
 
@@ -117,12 +178,14 @@ python -m minigit.cli init
 MiniGit/
 ├── minigit/
 │   ├── __init__.py
-│   └── cli.py           # All commands and core logic
+│   └── cli.py           # All commands and core logic (~280 lines)
 ├── pyproject.toml       # Python project metadata
 ├── README.md
 ├── LICENSE
 └── .gitignore
 ```
+
+---
 
 ## Example Workflow
 
@@ -150,6 +213,24 @@ git cat-file -p $commit_sha
 git cat-file -p $tree_sha
 ```
 
+---
+
+## Common Pitfalls
+
+⚠️ **Command not found?**  
+Run commands as `python -m minigit.cli <command>`, not `minigit <command>`
+
+⚠️ **Python version error?**  
+MiniGit requires Python 3.12+ for modern type hints
+
+⚠️ **Clone doesn't work?**  
+The `clone` command delegates to system Git—ensure Git is installed
+
+⚠️ **Where's `git add`?**  
+MiniGit has no staging area—it works directly with the working directory
+
+---
+
 ## What's Missing (By Design)
 
 MiniGit focuses on the **object model** and intentionally omits:
@@ -162,13 +243,19 @@ MiniGit focuses on the **object model** and intentionally omits:
 
 These omissions keep the codebase small and focused on Git's core storage concepts.
 
+---
+
 ## Future Possibilities
 
-- Implement a pure-Python packfile parser to eliminate the Git dependency for `clone`
-- Add staging area support (`add`, `reset`)
-- Handle merge commits (multiple parents)
-- Implement `checkout` to restore working directory from commits
-- Add branch creation and switching
+- [ ] Implement a pure-Python packfile parser to eliminate the Git dependency for `clone`
+- [ ] Add staging area support (`add`, `reset`)
+- [ ] Handle merge commits (multiple parents)
+- [ ] Implement `checkout` to restore working directory from commits
+- [ ] Add branch creation and switching
+- [ ] Support for tags and refs
+- [ ] Basic diff implementation
+
+---
 
 ## Verification
 
@@ -184,9 +271,31 @@ cd test-repo
 python -m minigit.cli ls-tree HEAD^{tree}  # Read Git's native objects
 ```
 
-## License
+---
 
-MIT License. See `LICENSE` for details.
+## Learning Resources
+
+To deepen your understanding of what MiniGit implements:
+
+- 📖 [Git Internals - Git Objects (Pro Git Book)](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
+- 🛠️ [Write Yourself a Git](https://wyag.thb.lt/)
+- 📚 [Building Git (book by James Coglan)](https://shop.jcoglan.com/building-git/)
+- 🧠 [Git from the Bottom Up](https://jwiegley.github.io/git-from-the-bottom-up/)
+
+---
+
+## Comparison with Other Git Implementations
+
+| Feature | MiniGit | ugit | pygit2 | Git (C) |
+|---------|---------|------|--------|---------|
+| **Lines of Code** | ~280 | ~500 | Bindings | ~300K |
+| **Dependencies** | None | None | libgit2 | Many |
+| **Object Format** | Native Git ✅ | Native Git ✅ | Native Git ✅ | Native Git ✅ |
+| **Purpose** | Education | Education | Production | Production |
+| **Index/Staging** | ❌ | ✅ | ✅ | ✅ |
+| **Network Clone** | Delegates to Git | ❌ | ✅ | ✅ |
+
+---
 
 ## Contributing
 
@@ -195,9 +304,32 @@ This is an educational project, but contributions are welcome! If you'd like to:
 - Improve documentation
 - Fix bugs
 - Add tests
+- Enhance error handling
 
 Feel free to open an issue or pull request.
 
 ---
 
-**Built to understand Git, one object at a time.**
+## License
+
+MIT License. See `LICENSE` for details.
+
+---
+
+## Author
+
+**mann-127**
+- GitHub: [@mann-127](https://github.com/mann-127)
+- Repository: [MiniGit](https://github.com/mann-127/MiniGit)
+
+---
+
+## Acknowledgments
+
+- Inspired by the Git community's commitment to open-source education
+- Built upon the excellent documentation in the [Pro Git Book](https://git-scm.com/book)
+- Thanks to James Coglan's ["Building Git"](https://shop.jcoglan.com/building-git/) for implementation insights
+
+---
+
+**Built to understand Git, one object at a time.** ⚡
