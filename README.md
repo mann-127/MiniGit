@@ -1,8 +1,8 @@
 # MiniGit
 
-![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)
+![Python Version](https://img.shields.io/badge/python-3.12+-green.svg)
 ![Code Size](https://img.shields.io/github/languages/code-size/mann-127/MiniGit)
-[![GitHub Stars](https://img.shields.io/github/stars/mann-127/MiniGit?style=social)](https://github.com/mann-127/MiniGit)
+![GitHub Stars](https://img.shields.io/github/stars/mann-127/MiniGit?style=social)
 
 MiniGit is an educational project that reimplements Git's core plumbing commands from scratch. It demonstrates how Git's content-addressable storage works under the hood—turning files into blobs, directories into trees, and snapshots into commits. Every object MiniGit creates is 100% compatible with Git's storage format, which you can verify by cloning a real repository and inspecting its objects.
 
