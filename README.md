@@ -1,11 +1,8 @@
 # MiniGit
 
 ![Python Version](https://img.shields.io/badge/python-3.12+-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Code Size](https://img.shields.io/github/languages/code-size/mann-127/MiniGit)
 [![GitHub Stars](https://img.shields.io/github/stars/mann-127/MiniGit?style=social)](https://github.com/mann-127/MiniGit)
-
-**A minimal Git implementation in pure Python that speaks Git's native object format.**
 
 MiniGit is an educational project that reimplements Git's core plumbing commands from scratch. It demonstrates how Git's content-addressable storage works under the hood—turning files into blobs, directories into trees, and snapshots into commits. Every object MiniGit creates is 100% compatible with Git's storage format, which you can verify by cloning a real repository and inspecting its objects.
 
@@ -294,19 +291,6 @@ To deepen your understanding of what MiniGit implements:
 | **Purpose** | Education | Education | Production | Production |
 | **Index/Staging** | ❌ | ✅ | ✅ | ✅ |
 | **Network Clone** | Delegates to Git | ❌ | ✅ | ✅ |
-
----
-
-## Contributing
-
-This is an educational project, but contributions are welcome! If you'd like to:
-- Add new commands
-- Improve documentation
-- Fix bugs
-- Add tests
-- Enhance error handling
-
-Feel free to open an issue or pull request.
 
 ---
 
